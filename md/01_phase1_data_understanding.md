@@ -5,6 +5,16 @@ Load, inspect, and profile all CSV datasets. Generate a formal data-quality repo
 
 ---
 
+## Rules Compliance Check
+
+| Rule | How We Comply |
+|---|---|
+| No external data | Only using `train.csv`, `test.csv`, `sample_submission.csv` |
+| No hand-labeling test data | Test set used only for final prediction, never inspected for labels |
+| Evaluation = F1-score | All analysis focuses on F1-relevant insights (class imbalance, precision/recall trade-offs) |
+
+---
+
 ## 1.1 Load & Initial Inspection
 
 ### Tasks
@@ -25,8 +35,6 @@ Load, inspect, and profile all CSV datasets. Generate a formal data-quality repo
 
 ## 1.2 Feature Profiling
 
-For each feature, document:
-
 | Feature | Type | Missing | Unique | Range | Notes |
 |---|---|---|---|---|---|
 | `transaction_id` | int | 0 | 8000/2000 | 1–10000 | ID only — drop before modelling |
@@ -45,7 +53,7 @@ For each feature, document:
 
 - **Target**: `is_fraud` (binary: 0/1)
 - **Task**: Binary Classification
-- **Evaluation Metric**: F1-score (competition-specified)
+- **Evaluation Metric**: F1-score (competition-specified in rules Section 3)
 - **Class Distribution**:
   - Legitimate (0): 7 879 samples (98.49%)
   - Fraudulent (1): 121 samples (1.51%)
@@ -62,7 +70,7 @@ For each feature, document:
 
 ---
 
-## 1.5 Data Quality Report Generation
+## 1.5 Data Quality Report
 
 ### Checks to perform:
 - [ ] Missing value counts per column (train & test)
@@ -74,12 +82,11 @@ For each feature, document:
 - [ ] Statistical distribution comparison (KS test or visual)
 
 ### Output
-- `reports/data_quality_report.md` — formal written report
-- Console/notebook summary tables
+- `reports/data_quality_report.md`
 
 ---
 
-## 1.6 Code Structure for Phase 1
+## 1.6 Code Structure
 
 ```
 src/data_profiling.py
@@ -96,8 +103,9 @@ src/data_profiling.py
 
 | Decision | Rationale |
 |---|---|
-| Target = `is_fraud` | Explicitly stated in competition description |
+| Target = `is_fraud` | Explicitly stated in competition description and rules |
 | Task = Binary Classification | Target is binary (0/1) |
-| Primary metric = F1-score | Competition evaluation metric |
+| Primary metric = F1-score | Competition rules Section 3: "scored using the F1-score metric" |
 | `transaction_id` = ID column (not a feature) | Sequential identifier with no predictive value |
+| No external data used | Competition rules Section 4: "strictly prohibited" |
 | No dataset merging required | Standard train/test split format |
