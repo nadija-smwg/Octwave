@@ -5,15 +5,29 @@ Train multiple appropriate models, compare performance using cross-validation an
 
 ---
 
+## Rules Compliance
+
+| Rule | How We Comply |
+|---|---|
+| F1-score evaluation | All CV and validation uses `scoring='f1'` as primary metric |
+| No external data | All models trained only on provided `train.csv` |
+| Open source only | Using sklearn, xgboost, lightgbm — all OSI-approved |
+| Reproducible code required | `random_state=42` everywhere; all code in `src/` modules |
+| No hand-labeling test data | Test set never used during training or validation |
+| Max 10 submissions/day | Validate locally first; only submit when confident |
+
+---
+
 ## 7.1 Model Selection Rationale
 
 ### Dataset Characteristics
 | Property | Value | Implication |
 |---|---|---|
-| Training size | ~6 400 (after split) | Medium — all models viable |
+| Training size | ~6 400 (after 80/20 split) | Medium — all models viable |
 | Features | ~15–18 (after engineering) | Low-dimensional — no dimensionality issues |
 | Target | Binary (1.5% positive) | Severe imbalance — need class weights / SMOTE |
 | Feature types | Mixed (numerical + categorical + binary) | Tree models handle natively; linear models need encoding |
+| Evaluation metric | **F1-score** (competition rules) | Must optimize for precision-recall balance, not accuracy |
 
 ### Selected Models
 
@@ -22,7 +36,7 @@ Train multiple appropriate models, compare performance using cross-validation an
 | **Logistic Regression** | Baseline; interpretable; fast; works well with few features | `class_weight='balanced'` |
 | **Random Forest** | Strong ensemble; handles mixed features; robust | `class_weight='balanced'` |
 | **Gradient Boosting** | Top performer for tabular data; handles imbalance | `sample_weight` via class weights |
-| **XGBoost** | Industry standard for competitions; built-in `scale_pos_weight` | `scale_pos_weight = n_neg / n_pos` |
+| **XGBoost** | Industry standard for competitions; built-in `scale_pos_weight` | `scale_pos_weight ≈ 65` |
 | **LightGBM** | Fast, handles categorical features natively | `is_unbalance=True` |
 | **SVM (RBF kernel)** | Good with few features; captures non-linear boundaries | `class_weight='balanced'` |
 
@@ -30,9 +44,9 @@ Train multiple appropriate models, compare performance using cross-validation an
 | Model | Reason for Exclusion |
 |---|---|
 | KNN | Sensitive to imbalanced data; 1.5% positive rate makes it impractical |
-| Naive Bayes | Feature independence assumption is violated (interaction features) |
+| Naive Bayes | Feature independence assumption violated (interaction features) |
 | Decision Tree (alone) | Prone to overfitting; Random Forest is strictly better |
-| Neural Networks | Dataset too small (8000 rows); overfitting risk; overkill for tabular data |
+| Neural Networks | Dataset too small (8000 rows); overfitting risk; harder to reproduce |
 | CatBoost | Redundant with XGBoost/LightGBM for this dataset size |
 
 ---
@@ -44,11 +58,11 @@ Train multiple appropriate models, compare performance using cross-validation an
 from sklearn.model_selection import cross_validate
 
 scoring = {
-    'f1': 'f1',
+    'f1': 'f1',              # PRIMARY — matches competition metric
     'precision': 'precision',
     'recall': 'recall',
     'roc_auc': 'roc_auc',
-    'accuracy': 'accuracy'
+    'accuracy': 'accuracy'   # Secondary only — do NOT select models by accuracy
 }
 
 cv_results = cross_validate(
@@ -79,7 +93,7 @@ from sklearn.metrics import (
 
 ## 7.3 Class Imbalance Strategies
 
-### Strategy A: Class Weights
+### Strategy A: Class Weights (Primary)
 ```python
 # Logistic Regression, SVM, Random Forest
 model = LogisticRegression(class_weight='balanced')
@@ -101,9 +115,9 @@ pipeline = ImbPipeline([
 ])
 ```
 
-### Strategy C: Threshold Tuning
+### Strategy C: Threshold Tuning (Post-Training)
 ```python
-# After training, optimize the decision threshold on validation set
+# Optimize classification threshold on VALIDATION set (not test)
 from sklearn.metrics import precision_recall_curve
 precisions, recalls, thresholds = precision_recall_curve(y_val, y_val_proba)
 f1_scores = 2 * (precisions * recalls) / (precisions + recalls + 1e-8)
@@ -111,13 +125,14 @@ optimal_threshold = thresholds[np.argmax(f1_scores)]
 ```
 
 ### Plan
-- Train each model with **class weights first** (simpler, no resampling)
-- Compare with **SMOTE variants** for the top 2–3 models
-- Apply **threshold tuning** to the final selected model
+1. Train each model with **class weights first** (simpler, no resampling)
+2. Compare with **SMOTE variants** for the top 2–3 models
+3. Apply **threshold tuning** to the final selected model
+4. **Only submit to Kaggle when local val F1 is strong** (preserve daily submission quota)
 
 ---
 
-## 7.4 Expected Results Table
+## 7.4 Model Comparison Table
 
 | Model | CV F1 (mean±std) | Val F1 | Val Precision | Val Recall | Val ROC-AUC | Train Time |
 |---|---|---|---|---|---|---|
@@ -128,8 +143,8 @@ optimal_threshold = thresholds[np.argmax(f1_scores)]
 | LightGBM | TBD | TBD | TBD | TBD | TBD | ~1s |
 | SVM (RBF) | TBD | TBD | TBD | TBD | TBD | ~5s |
 
-### Selection Criteria for Tuning
-1. **Primary**: Highest CV F1 (mean)
+### Selection Criteria for Tuning (prioritised)
+1. **Primary**: Highest **CV F1** (mean) — matches competition metric
 2. **Secondary**: Low gap between train and CV F1 (no overfitting)
 3. **Tertiary**: Validation F1 confirms CV ranking
 4. Select **top 2–3 models** for hyperparameter tuning
@@ -138,21 +153,22 @@ optimal_threshold = thresholds[np.argmax(f1_scores)]
 
 ## 7.5 Confusion Matrix Analysis
 
-For each model, generate:
+For each model:
 ```
               Predicted 0   Predicted 1
 Actual 0         TN            FP
 Actual 1         FN            TP
 ```
 
-Key metrics to monitor:
-- **False Negatives (FN)**: Missed fraud — critical cost
-- **False Positives (FP)**: Legitimate flagged as fraud — annoyance cost
-- **In fraud detection, FN is typically more costly than FP**
+For **F1-score optimization**:
+- F1 = 2 × (Precision × Recall) / (Precision + Recall)
+- Need **balance between catching fraud (Recall) and being correct when flagging (Precision)**
+- Too many FP → low Precision → low F1
+- Too many FN → low Recall → low F1
 
 ---
 
-## 7.6 Code Structure for Phase 7
+## 7.6 Code Structure
 
 ```
 src/train.py

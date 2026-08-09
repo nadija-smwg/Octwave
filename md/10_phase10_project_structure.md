@@ -1,7 +1,19 @@
 # Phase 10 — Project Structure, Documentation & Deliverables
 
 ## Objective
-Organize the project professionally, write comprehensive documentation, and produce all required deliverables.
+Organize the project professionally, write comprehensive documentation, and produce all required deliverables — including **winner-requirement documentation** per competition rules.
+
+---
+
+## Rules Compliance
+
+| Rule | How We Comply |
+|---|---|
+| **Winner Requirements (Section 5)** | Complete reproducible source code + methodology overview in `reports/final_report.md` |
+| **No external data (Section 4)** | `requirements.txt` only lists open-source libraries; no external datasets referenced |
+| **Open source only (Section 6)** | All code uses OSI-approved open-source libraries |
+| **No private code sharing (Section 4)** | Team members share via official Kaggle team; no private external sharing |
+| **Reproducibility** | Fixed `random_state=42`; pinned dependency versions; step-by-step README |
 
 ---
 
@@ -21,18 +33,12 @@ Octwave/
 │       ├── train_engineered.csv
 │       └── test_engineered.csv
 │
-├── md/                               # Implementation plans (this folder)
+├── md/                               # Implementation plans
 │   ├── 00_competition_overview.md
-│   ├── 01_phase1_data_understanding.md
-│   ├── 02_phase2_data_cleaning.md
-│   ├── 03_phase3_eda.md
-│   ├── 04_phase4_feature_engineering.md
-│   ├── 05_phase5_splitting_leakage.md
-│   ├── 06_phase6_feature_selection.md
-│   ├── 07_phase7_model_training.md
-│   ├── 08_phase8_hyperparameter_tuning.md
-│   ├── 09_phase9_final_model_interpretability.md
-│   └── 10_phase10_project_structure.md
+│   ├── 01–10 phase plans
+│   ├── member1_data_track.md
+│   ├── member2_modelling_track.md
+│   └── team_coordination.md
 │
 ├── notebooks/
 │   ├── 01_data_analysis.ipynb        # Data loading & profiling
@@ -41,25 +47,26 @@ Octwave/
 │
 ├── src/
 │   ├── __init__.py
-│   ├── data_profiling.py             # Dataset loading & profiling
-│   ├── data_cleaning.py              # Cleaning functions
-│   ├── feature_engineering.py        # Feature engineering functions
-│   ├── preprocessing.py              # Pipeline/ColumnTransformer builders
-│   ├── feature_selection.py          # Feature selection methods
-│   ├── train.py                      # Model training & comparison
-│   ├── evaluate.py                   # Metrics & evaluation functions
-│   ├── tune.py                       # Hyperparameter tuning
-│   ├── predict.py                    # Prediction & submission generation
-│   └── interpret.py                  # SHAP, permutation importance
+│   ├── data_profiling.py             # Phase 1 (Member 1)
+│   ├── data_cleaning.py              # Phase 2 (Member 1)
+│   ├── eda.py                        # Phase 3 (Member 1)
+│   ├── feature_engineering.py        # Phase 4 (Member 1)
+│   ├── preprocessing.py              # Phase 5 (Member 2)
+│   ├── feature_selection.py          # Phase 6 (Member 2)
+│   ├── train.py                      # Phase 7 (Member 2)
+│   ├── evaluate.py                   # Phase 7 (Member 2)
+│   ├── tune.py                       # Phase 8 (Member 2)
+│   ├── predict.py                    # Phase 9 (Member 2)
+│   └── interpret.py                  # Phase 9 (Member 2)
 │
 ├── models/
-│   ├── final_model.pkl               # Saved pipeline (preprocessor + model)
+│   ├── final_model.pkl               # Saved pipeline
 │   └── model_metadata.pkl            # Hyperparams, thresholds, feature list
 │
 ├── reports/
-│   ├── data_quality_report.md        # Data quality findings
-│   ├── model_results.md              # Model comparison & final results
-│   ├── final_report.md               # Comprehensive final report
+│   ├── data_quality_report.md        # Phase 1 output
+│   ├── model_results.md              # Phase 7–8 output
+│   ├── final_report.md               # Winner-requirement methodology overview
 │   └── figures/                      # All EDA & evaluation plots
 │       ├── target_distribution.png
 │       ├── feature_distributions.png
@@ -73,15 +80,18 @@ Octwave/
 │       ├── shap_summary.png
 │       └── model_comparison.png
 │
-├── submission.csv                    # Competition submission file
-├── requirements.txt                  # Python dependencies
+├── submission.csv                    # Competition submission (Submission A)
+├── submission_conservative.csv       # Safety submission (Submission B)
+├── submission_log.md                 # Track all submissions (date, model, score)
+├── requirements.txt                  # Python dependencies (pinned versions)
 ├── README.md                         # Complete project documentation
-└── competiton_overview.md            # Original competition description
+├── competiton_overview.md            # Original competition description
+└── rules.md                          # Original competition rules
 ```
 
 ---
 
-## 10.2 requirements.txt
+## 10.2 requirements.txt (Pinned Versions for Reproducibility)
 
 ```
 pandas>=2.0.0
@@ -97,103 +107,120 @@ joblib>=1.3.0
 statsmodels>=0.14.0
 ```
 
+> All libraries are OSI-approved open source (Rules Section 6c compliance).
+
 ---
 
 ## 10.3 README.md Content Plan
 
-1. **Project Title & Description**
-2. **Competition Overview** (brief)
-3. **Dataset Description** (feature table)
-4. **Installation & Setup**
-   - Clone repo
-   - Create virtual environment
-   - `pip install -r requirements.txt`
-5. **Project Structure** (directory tree)
-6. **How to Reproduce**
+1. **Project Title**: OctWave 3.0 — Credit Card Fraud Detection
+2. **Team**: Team name (as assigned by OC per Rules Section 2)
+3. **Competition Overview** (brief — link to `competiton_overview.md`)
+4. **Dataset Description** (feature table)
+5. **Installation & Setup**
+   ```bash
+   git clone <repo>
+   pip install -r requirements.txt
+   ```
+6. **How to Reproduce** (Winner Requirement compliance)
    - Step 1: Place data in `data/raw/`
-   - Step 2: Run notebooks in order, OR
-   - Step 3: Run `python src/train.py` for full pipeline
-   - Step 4: Run `python src/predict.py` for submission
+   - Step 2: Run notebooks in order, OR run `python src/train.py`
+   - Step 3: Run `python src/predict.py` to generate `submission.csv`
 7. **Results Summary**
-   - Best model & F1-score
-   - Key features
-8. **Methodology**
-   - Data cleaning decisions
-   - Feature engineering rationale
-   - Model selection process
-9. **License**
+   - Best model, F1-score, key features
+8. **Methodology** (Winner Requirement: "brief overview of model methodology, data preprocessing, and training steps")
+9. **Project Structure** (directory tree)
 
 ---
 
 ## 10.4 Final Report Content Plan (`reports/final_report.md`)
 
+> This document fulfils **Winner Requirements (Rules Section 5)**: "brief overview of model methodology, data preprocessing, and training steps"
+
+### Contents:
 1. **Executive Summary**
    - Problem: Credit card fraud detection (binary classification)
    - Dataset: 8000 train / 2000 test, 1.5% fraud rate
+   - Metric: F1-score (per competition rules)
    - Best model: [TBD] with F1 = [TBD]
-   
-2. **Data Cleaning Summary**
+
+2. **Data Preprocessing Steps**
    - No missing values, no duplicates
    - All values within valid ranges
    - Only `transaction_id` dropped (identifier)
-   
-3. **Key EDA Findings**
-   - Severe class imbalance (65:1)
-   - Strongest signals: device trust, transaction hour, foreign, location mismatch
-   - Cardholder age has no predictive power
-   
-4. **Feature Engineering**
-   - 10 engineered features (cyclical encoding, interactions, ratios, flags)
-   - Justification for each
-   
-5. **Models Tested**
+   - No external data used
+
+3. **Feature Engineering**
+   - 10 engineered features with justification for each
+   - Stateless transforms only (no leakage)
+
+4. **Model Development**
    - 6 models compared
-   - Cross-validation and validation set results
-   - Model comparison table
-   
-6. **Final Model**
+   - Class imbalance handling: class weights + threshold tuning
+   - Cross-validation (5-fold stratified)
+   - F1-score as selection criterion
+
+5. **Final Model**
    - Selected model and hyperparameters
-   - Why it was chosen
+   - Why it was chosen (highest F1 with good generalization)
    - Feature importance ranking
    - SHAP analysis highlights
-   
+
+6. **Submission Strategy**
+   - Submission A: Best F1 model
+   - Submission B: Conservative ensemble/regularized model
+
 7. **Limitations & Future Work**
-   - Small positive class (121 samples)
-   - Simulated data caveats
-   - Potential improvements: more data, temporal features, ensemble stacking
 
 ---
 
-## 10.5 Deliverables Checklist
+## 10.5 Submission Tracking Log (`submission_log.md`)
 
-| Deliverable | File/Location | Status |
+Track all Kaggle submissions to stay within the **10 per day** limit:
+
+```markdown
+# Submission Log
+
+| # | Date | Time | Model | Threshold | Features | Local Val F1 | Public LB F1 | Notes |
+|---|---|---|---|---|---|---|---|---|
+| 1 | YYYY-MM-DD | HH:MM | XGBoost v1 | 0.35 | All | 0.XX | 0.XX | First baseline |
+| 2 | ... | ... | ... | ... | ... | ... | ... | ... |
+```
+
+---
+
+## 10.6 Deliverables Checklist
+
+| Deliverable | File/Location | Owner | Status |
+|---|---|---|---|
+| Cleaned dataset | `data/processed/train_cleaned.csv` | Member 1 | Phase 2 |
+| EDA visualizations | `reports/figures/` | Member 1 | Phase 3 |
+| Feature engineering code | `src/feature_engineering.py` | Member 1 | Phase 4 |
+| Multiple trained models | `src/train.py` | Member 2 | Phase 7 |
+| Model comparison table | `reports/model_results.md` | Member 2 | Phase 7 |
+| Tuned model | Phase 8 output | Member 2 | Phase 8 |
+| Feature importance plots | `reports/figures/` | Member 2 | Phase 9 |
+| SHAP analysis | `reports/figures/shap_*.png` | Member 2 | Phase 9 |
+| Saved ML pipeline | `models/final_model.pkl` | Member 2 | Phase 9 |
+| Submission A (aggressive) | `submission.csv` | Member 2 | Phase 9 |
+| Submission B (conservative) | `submission_conservative.csv` | Member 2 | Phase 9 |
+| Submission tracking log | `submission_log.md` | Both | Ongoing |
+| `requirements.txt` | Root directory | Member 2 | Phase 10 |
+| `README.md` | Root directory | Member 2 | Phase 10 |
+| Final report (Winner Req.) | `reports/final_report.md` | Both | Phase 10 |
+| Data quality report | `reports/data_quality_report.md` | Member 1 | Phase 1 |
+
+---
+
+## 10.7 Code Quality Standards
+
+| Standard | Implementation | Rules Rationale |
 |---|---|---|
-| Cleaned dataset | `data/processed/train_cleaned.csv` | Phase 2 |
-| EDA visualizations | `reports/figures/` | Phase 3 |
-| Feature-engineered pipeline | `src/feature_engineering.py` | Phase 4 |
-| Multiple trained models | `src/train.py` (comparison) | Phase 7 |
-| Model comparison table | `reports/model_results.md` | Phase 7 |
-| Hyperparameter-tuned model | Phase 8 output | Phase 8 |
-| Evaluation metrics | `reports/model_results.md` | Phase 7–8 |
-| Feature importance analysis | `reports/figures/`, `reports/final_report.md` | Phase 9 |
-| SHAP interpretability | `reports/figures/shap_*.png` | Phase 9 |
-| Saved ML pipeline | `models/final_model.pkl` | Phase 9 |
-| `requirements.txt` | Root directory | Phase 10 |
-| `README.md` | Root directory | Phase 10 |
-| Final report | `reports/final_report.md` | Phase 10 |
-| Competition submission | `submission.csv` | Phase 9 |
-
----
-
-## 10.6 Code Quality Standards
-
-| Standard | Implementation |
-|---|---|
-| Modularity | Each phase has its own module in `src/` |
-| Reproducibility | `random_state=42` everywhere |
-| Documentation | Docstrings on all functions; decision comments |
-| Error handling | Assertions for data shape, type checks, value ranges |
-| No hard-coding | Config variables at top of each module |
-| No silent drops | Every row/column removal logged and justified |
-| Clean imports | Standard library → third-party → local modules |
-| Type hints | On function signatures where practical |
+| Modularity | Each phase has its own module in `src/` | Reproducibility requirement |
+| Reproducibility | `random_state=42` everywhere | Winner must provide reproducible code |
+| Documentation | Docstrings + methodology report | Winner requirement: "methodology overview" |
+| Error handling | Assertions for data shape, type checks | Robustness |
+| No external data | No external imports of data | Rules Section 4 |
+| Open source only | All libraries OSI-approved | Rules Section 6c |
+| No hard-coding | Config variables at top of each module | Reproducibility |
+| Submission validation | Check format before upload | Avoid wasting daily quota |
