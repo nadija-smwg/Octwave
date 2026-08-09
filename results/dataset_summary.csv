@@ -1,0 +1,2 @@
+Dataset,Rows,Features,Target,Classes,Train Samples,Test Samples
+Processed Dataset,8000,8,is_fraud,2,6400,1600

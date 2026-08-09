@@ -1,0 +1,7 @@
+{
+    "model_name": "Gradient Boosting",
+    "f1_score": 1.0,
+    "roc_auc": 1.0,
+    "best_parameters": "{'n_estimators': 100, 'max_depth': 3, 'learning_rate': 0.2}",
+    "training_time": 13.13
+}

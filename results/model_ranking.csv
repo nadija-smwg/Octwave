@@ -1,0 +1,8 @@
+Rank,Model,Primary Metric,Score,Selected
+1,Gradient Boosting,F1,1.0,YES
+2,XGBoost,F1,0.9387755102040817,NO
+3,Random Forest,F1,0.9333333333333333,NO
+4,SVM,F1,0.8571428571428571,NO
+5,Decision Tree,F1,0.8260869565217391,NO
+6,Logistic Regression,F1,0.7931034482758621,NO
+7,KNN,F1,0.75,NO

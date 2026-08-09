@@ -1,0 +1,8 @@
+Rank,Model,Dataset,Features,CV Score,Test Accuracy,Precision,Recall,F1 Score,ROC-AUC,Training Time,Best Parameters
+1,Gradient Boosting,Processed,8,0.9419484261589526,1.0,1.0,1.0,1.0,1.0,13.13,"{'n_estimators': 100, 'max_depth': 3, 'learning_rate': 0.2}"
+2,XGBoost,Processed,8,0.9195565640835366,0.998125,0.92,0.9583333333333334,0.9387755102040817,0.9998413705583756,2.11,"{'n_estimators': 50, 'max_depth': 5, 'learning_rate': 0.1}"
+3,Random Forest,Processed,8,0.816348357524828,0.998125,1.0,0.875,0.9333333333333333,0.9996959602368867,4.73,"{'n_estimators': 50, 'max_depth': None}"
+4,SVM,Processed,8,0.8142950073182631,0.995625,0.84,0.875,0.8571428571428571,0.9990217851099831,8.86,"{'kernel': 'rbf', 'C': 1}"
+5,Decision Tree,Processed,8,0.8860011714500878,0.995,0.8636363636363636,0.7916666666666666,0.8260869565217391,0.894881556683587,2.48,"{'max_depth': None, 'min_samples_split': 2}"
+6,Logistic Regression,Processed,8,0.7989037433155081,0.9925,0.6764705882352942,0.9583333333333334,0.7931034482758621,0.9988895939086295,1.86,"{'C': 10, 'solver': 'lbfgs'}"
+7,KNN,Processed,8,0.6584193284193284,0.99375,0.9375,0.625,0.75,0.9157148900169205,3.2,"{'n_neighbors': 3, 'weights': 'distance'}"

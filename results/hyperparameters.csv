@@ -1,0 +1,17 @@
+Model,Parameter,Search Values,Best Value
+Logistic Regression,C,"[0.01, 0.1, 1, 10]",10
+Logistic Regression,solver,"['lbfgs', 'liblinear']",lbfgs
+Decision Tree,max_depth,"[None, 5, 10, 15]",None
+Decision Tree,min_samples_split,"[2, 5, 10]",2
+Random Forest,n_estimators,"[50, 100]",50
+Random Forest,max_depth,"[None, 10, 20]",None
+Gradient Boosting,n_estimators,"[50, 100]",100
+Gradient Boosting,max_depth,"[3, 5]",3
+Gradient Boosting,learning_rate,"[0.01, 0.1, 0.2]",0.2
+SVM,kernel,"['linear', 'rbf']",rbf
+SVM,C,"[0.1, 1]",1
+KNN,n_neighbors,"[3, 5, 7]",3
+KNN,weights,"['uniform', 'distance']",distance
+XGBoost,n_estimators,"[50, 100]",50
+XGBoost,max_depth,"[3, 5, 7]",5
+XGBoost,learning_rate,"[0.05, 0.1, 0.2]",0.1
