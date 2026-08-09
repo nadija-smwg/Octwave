@@ -37,3 +37,10 @@
 | cardholder_age | 43.4078 | 43.7125 | 14.9733 | 15.0037 |
 
 **Conclusion**: Data distributions between train and test match closely. Data quality is excellent.
+## 6. Data Cleaning Summary (Phase 2)
+- **Missing values**: 0 (No imputation needed).
+- **Duplicates**: 0 (No deduplication needed).
+- **Type fixes**: `merchant_category` converted to categorical.
+- **Invalid values**: None found.
+- **Outliers**: Identified in `amount` and `velocity_last_24h` but kept as they represent valid financial signals.
+- **ID columns**: `transaction_id` removed prior to modelling.
