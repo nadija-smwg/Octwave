@@ -7,7 +7,23 @@ Build a **binary classification** model to detect fraudulent credit card transac
 
 ---
 
-## 2. Dataset Summary
+## 2. Competition Rules (Key Constraints)
+
+| Rule | Detail | Impact on Implementation |
+|---|---|---|
+| **Evaluation Metric** | F1-score | Optimize for F1, not accuracy. Use F1 as primary scoring in CV and tuning. |
+| **Daily Submissions** | Max 10 per day | Be strategic — don't waste submissions. Validate locally first. |
+| **Final Selection** | Up to 2 submissions for Private Leaderboard | Prepare 2 best submissions: (1) best F1, (2) best generalization/safe pick |
+| **No External Data** | Only competition dataset allowed | Cannot use any external fraud datasets, pre-trained models, or external feature sources |
+| **No Private Code Sharing** | Code sharing only via Kaggle forums | Team members must work within the same team account |
+| **Winner Requirements** | Must submit reproducible code + methodology overview | All code must be clean, documented, and reproducible. Include methodology writeup. |
+| **No Hand-Labeling** | Cannot manually label test data | All predictions must come from the ML model |
+| **Open Source Only** | Code must use OSI-approved licenses | Use only standard open-source libraries (pandas, sklearn, xgboost, etc.) |
+| **Team Size** | Up to 4 members (our team = 2) | Split work into 2 parallel tracks |
+
+---
+
+## 3. Dataset Summary
 
 | File | Rows | Columns | Purpose |
 |---|---|---|---|
@@ -17,7 +33,7 @@ Build a **binary classification** model to detect fraudulent credit card transac
 
 ---
 
-## 3. Feature Catalogue
+## 4. Feature Catalogue
 
 | Feature | Type | Range / Values | Description |
 |---|---|---|---|
@@ -34,7 +50,7 @@ Build a **binary classification** model to detect fraudulent credit card transac
 
 ---
 
-## 4. Data Quality Snapshot
+## 5. Data Quality Snapshot
 
 | Check | Result |
 |---|---|
@@ -47,7 +63,7 @@ Build a **binary classification** model to detect fraudulent credit card transac
 
 ---
 
-## 5. Target Distribution — Critical Imbalance
+## 6. Target Distribution — Critical Imbalance
 
 | Class | Count | Percentage |
 |---|---|---|
@@ -60,9 +76,9 @@ Build a **binary classification** model to detect fraudulent credit card transac
 
 ---
 
-## 6. Key Patterns Discovered in Training Data
+## 7. Key Patterns Discovered in Training Data
 
-### 6.1 Strongest Fraud Signals (Pearson correlation with `is_fraud`)
+### 7.1 Strongest Fraud Signals (Pearson correlation with `is_fraud`)
 
 | Feature | Correlation | Direction |
 |---|---|---|
@@ -74,7 +90,7 @@ Build a **binary classification** model to detect fraudulent credit card transac
 | `amount` | +0.034 | Weak — fraud mean slightly higher but very noisy |
 | `cardholder_age` | +0.000 | Essentially **no signal** |
 
-### 6.2 Fraud by Merchant Category
+### 7.2 Fraud by Merchant Category
 
 | Category | Fraud Rate |
 |---|---|
@@ -84,9 +100,7 @@ Build a **binary classification** model to detect fraudulent credit card transac
 | Clothing | 1.10 % |
 | Electronics | 0.96 % |
 
-Differences exist but are modest — all categories present in both classes.
-
-### 6.3 Fraud Profile Summary
+### 7.3 Fraud Profile Summary
 
 A typical fraudulent transaction is characterised by:
 - **Late-night hour** (0 – 3 AM)
@@ -97,7 +111,7 @@ A typical fraudulent transaction is characterised by:
 
 ---
 
-## 7. Submission Format
+## 8. Submission Format
 
 ```csv
 transaction_id,is_fraud
@@ -109,3 +123,16 @@ transaction_id,is_fraud
 
 Two columns: `transaction_id` (int) and `is_fraud` (0 or 1).  
 Must contain exactly 2 000 rows matching `test.csv` IDs.
+
+---
+
+## 9. Submission Strategy (Rules-Driven)
+
+Given the **10 submissions/day** limit and **2 final selections**:
+
+1. **Do NOT submit every model variant** — validate locally first using stratified holdout + CV
+2. **Local validation F1 must be strong** before spending a submission
+3. **Prepare 2 final submissions**:
+   - **Submission A (Aggressive)**: Best F1 model with optimized threshold — highest potential
+   - **Submission B (Conservative)**: Strong generalizer (e.g., ensemble or regularized model) — safety pick
+4. **Track all submissions** in a log with: model type, hyperparameters, local val F1, public LB F1
