@@ -1,7 +1,9 @@
 Competition Rules
-OctWave 3.0 - Credit Card Fraud Detection Challenge
+OctWave 3.0 - Tom & Jerry Image Classification Challenge
 1. Competition Overview
-This competition provides participants with hands-on experience in solving real-world machine learning problems. The goal is to build a classification model that accurately detects fraudulent credit card transactions is_fraud using the provided dataset.
+The goal of this competition is to develop a computer vision and machine learning model capable of detecting specific cartoon characters in image frames. Participants are required to build a multi-class image classification model that can accurately identify the presence of 'Tom' and 'Jerry' in frames extracted from the classic animated series.
+
+This competition provides an opportunity to apply image preprocessing, data augmentation, deep learning model development, and evaluation techniques to solve a challenging and noisy computer vision problem.
 
 2. Mandatory Team Naming & Limits
 Official Team Names:All teams and individual participants MUST set their Kaggle team name to match the official name assigned to them by the OctWave 3.0 Organizing Committee (OC). Submissions made under non-assigned, custom, or modified team names will be disqualified.
@@ -11,9 +13,9 @@ Team Size:Participants may participate individually or in teams of up to 4 membe
 Account Rules:Each participant can belong to only one team using a single Kaggle account. Falsifying accounts or joining multiple teams will result in immediate disqualification.
 
 3. Submission Rules
-Daily Submissions: Maximum of 10 submissions per day.
+Daily Submissions: Maximum of 20 submissions per day.
 
-Evaluation Metric: Submissions will be scored using the F1-score metric to properly account for class imbalance in fraud detection.
+Evaluation Metric: Submissions will be scored using the Macro F1-score metric to properly account for class imbalance in fraud detection.
 
 Final Evaluation: Participants may select up to 2 submissions for final Private Leaderboard scoring.
 
